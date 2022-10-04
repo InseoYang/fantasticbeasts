@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Song+Myung&display=swap" rel="stylesheet">
+</head>
+<body class="container">
+    <div class="jumbotron">
+    <article class="start">
+        <h1 class="mt-5 text-center">나랑 꼭 닮은 신비한 동물은?</h1>
+        <img id="mainImage" src="../images/dragon.png">
+        <button type="button" class="btn btn-secondary mt-5" onclick="start();">테스트 시작하기</button>
+    </article>
+    <article class="question">
+        <div class="progress mt-5">
+            <div class="progress-bar" role="progressbar" style="width: calc(100/12*1%)" ></div>
+        </div>
+        <div class="qimage">
+        <img id="qimage" src="../images/direction.jpg" class="mt-5" alt="...">
+        </div>
+        <br>
+        <h2 id="title" class="text-center mt-5">문제</h2>
+        <input id="type" type="hidden" value="EI">
+        <button id="A" type="button" class="btn btn-secondary mt-5">Secondary Button</button>
+        <button id="B" type="button" class="btn btn-secondary mt-5">Secondary Button</button>
+    </article>
+    <article class="result">
+        <img id="img"class="rounded-circle mt-5"src="../images/dragon.png" alt="animal">
+        <h2 id="animal" class="text-center mt-5">동물이름</h2>
+        <h3 id="explain" class="text-center mt-5">설명</h3>
+        <button onclick="retry()" type="button" class="btn btn-secondary mt-5 mb-5">다시하기</button>
+        <!-- Go to www.addthis.com/dashboard to customize your tools -->
+        <div>
+        <div class="share addthis_inline_share_toolbox"></div>
+        </div>
+            
+    </article>
+    </div>
+    <input type="hidden" id="EI"value="0">
+    <input type="hidden" id="SN"value="0">
+    <input type="hidden" id="TF"value="0">
+    <input type="hidden" id="JP"value="0">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+    <script>
+        let num =1;
+        let q = {
+            1:{"title":"마법학교 입학 허가서를 받은 당신,<br>무엇을 타고 갈까?", "qimage":"../images/letter.png","type":"JP","A":"마법학교 급행열차","B":"하늘을 나는 자동차"},
+            2:{"title":"도착 후, 길을 잃었다! 이 때 당신은?", "qimage":"../images/lost-forest.png","type":"EI","A":"지나가는 학생에게 길을 물어본다","B":"혼자서 고민한다"},
+            3:{"title":"간신히 입학식에 도착한 당신,<br> 대강당에 도착하자마자 눈에 들어오는 것은?", "qimage":"../images/greathall.png","type":"TF","A":"대강당의 앤틱 가구와 장식들","B":"너무 조용한 분위기.. 내가 많이 늦었나봐!"},
+            4:{"title":"자리를 찾아 앉은 후 기숙사 배정을 받게되는데,,<br>이때 드는 생각은", "qimage":"../images/magic-hat.png","type":"SN","A":"기숙사는 어디에 있지?","B":"언젠가 책에서 읽었던 마법 세계의 영웅으로 빙의해서 <br> 학교생활 시뮬레이션 돌리기"},
+            5:{"title":"다같이 기숙사로 가는길..<br>처음보는 같은 기숙사 친구가 말을 건넨다.<br>이때 나의 반응은", "qimage":"../images/friend.png","type":"TF","A":"우리 기숙사 비밀암호가 뭐였더라.. 혹시 알아?","B":"반가워!! 학교생활 너무 기대된다!!"},
+            6:{"title":"개학 전 날 밤, 당신은..", "qimage":"../images/dormitory.png","type":"JP","A":"교과서를 미리 챙겨놓고 잊은 건 없는지 확인한다","B":"일단 침대에 누워.. 내일 아침에 챙겨야지"},
+            7:{"title":"첫 마법약 수업!<br>조를 지어서 실험해야하는데..", "qimage":"../images/magic-pot.png","type":"EI","A":"옆에 앉은 친구에게 함께 하자고 제안한다","B":"어쩌지.. 이런거 정말 싫다.. 혼자 하는 과제는 없나?"},
+            8:{"title":"여차저차 조별활동을 하게 된 당신,<br>마법약을 만드는데 개구리 눈알을 넣어야 한다.<br>이때 당신의 생각은?", "qimage":"../images/frog.png","type":"TF","A":"개구리 눈알은 이렇게 생겼구나.. <br> 조금 징그럽지만 마법약을 정확히 만들기위해서 어쩔 수 없어!","B":"징그러운건 싫어!! 저 개구리 너무 불쌍해!!<br>(눈꽉감고 마법솥에 넣는다)"},
+            9:{"title":"수업이 끝나고 기숙사에 돌아온 당신,<br>요즘 기숙사 앞 복도에<br>유령이 돌아다닌다는 소문을 듣게되는데..", "qimage":"../images/ghost.png","type":"SN","A":"유령?? 조금 무섭지만 어쩔수 없지. 교수님들이 해결해주실거야.","B":"유령과 마주치면 어떻게 해야하지..<br> 혹시 착한유령이면 친해질수있으려나? 그럼 나도 유령친구가 생기는건가 ??"},
+            10:{"title":"소문의 유령과 마주친 당신, 이제 어떻게 하지??", "qimage":"../images/ghost-friend.png","type":"EI","A":"착해보이는데,, 말걸어본다. 친구가 될 수 있을지도?","B":"못본척하고 지나가려 노력한다"},
+            11:{"title":"어쩌다보니 유령과 대화하게 된 당신,<br> 유령은 어둠의 숲에서 잃어버린<br>물건 하나만 가져다준다면<br>학교를 떠나겠다고 말하는데..", "qimage":"../images/gemstone.png","type":"SN","A":"미안하지만 그곳은 금지된 구역이야.","B":"어둠의 숲에 가끔씩 나타난다는 유니콘이 떠오르면서 <br> 벌써 머릿속에 어둠의 숲에서 유니콘과 만나는 내자신이 그려진다."},
+            12:{"title":"결국 유령의 고집에 못이겨<br>어둠의 숲으로 떠나게 된 당신,,<br> 당신의 짐가방에 있는 것은?", "qimage":"../images/bag.png","type":"JP","A":"나침반, 야생 마법동물 대처법이 적혀있는 책,<br> 어둠의숲에서 찾아야 할 물건 목록과 위치 및 순서를 효율적으로 적어놓은 지도","B":"아 맞다 급하게 챙기느라 지도를 안가져왔네 <br> 이렇게 된 이상 믿을건 지팡이뿐이다"}
+        };
+        let result ={
+            "INFP": {"animal":"dragon","explain":"dragondesc", "img":"../images/dragon.png"},
+            "INFJ": {"animal":"lion","explain":"dragondesc", "img":"../images/dragon.png"},
+            "ISFP": {"animal":"tiger","explain":"dragondesc", "img":"../images/dragon.png"},
+            "ISFJ": {"animal":"lion","explain":"dragondesc", "img":"../images/dragon.png"},
+            "INTP": {"animal":"tiger","explain":"dragondesc", "img":"../images/dragon.png"},
+            "INTJ": {"animal":"lion","explain":"dragondesc", "img":"../images/dragon.png"},
+            "ISTP": {"animal":"tiger","explain":"dragondesc", "img":"../images/dragon.png"},
+            "ISFJ": {"animal":"tiger","explain":"dragondesc", "img":"../images/dragon.png"},
+            "ENTP": {"animal":"tiger","explain":"dragondesc", "img":"../images/dragon.png"},
+            "ENTJ": {"animal":"lion","explain":"dragondesc", "img":"../images/dragon.png"},
+            "ESTP": {"animal":"tiger","explain":"dragondesc", "img":"../images/dragon.png"},
+            "ESTJ": {"animal":"tiger","explain":"dragondesc", "img":"../images/dragon.png"},
+            "ENFP": {"animal":"lion","explain":"dragondesc", "img":"../images/dragon.png"},
+            "ENFJ": {"animal":"tiger","explain":"dragondesc", "img":"../images/dragon.png"},
+            "ESFP": {"animal":"tiger","explain":"dragondesc", "img":"../images/dragon.png"},
+            "ESFJ": {"animal":"lion","explain":"dragondesc", "img":"../images/dragon.png"}
+        }
+        function retry(){
+            $(".start").show();
+            $('.question').hide();
+            $('.result').hide();
+            window.location.reload();
+        };
+        function start(){
+            $(".start").hide();
+            $('.question').show();
+            next();
+        };
+        $("#A").click(function(){
+            let type = $("#type").val();
+            let preValue = $("#"+type).val();
+            $("#"+type).val(parseInt(preValue)+1);
+            next();
+        });
+        $("#B").click(function(){
+            next ();
+        });
+        function next(){
+            if (num === 13){
+                $(".question").hide();
+                $(".result").show();
+                let mbti = "";
+                ($("#EI").val() < 2) ? mbti += "I" : mbti += "E";
+                ($("#SN").val() < 2) ? mbti += "N" : mbti += "S";
+                ($("#TF").val() < 2) ? mbti += "F" : mbti += "T";
+                ($("#JP").val() < 2) ? mbti += "P" : mbti += "J";
+                alert(mbti);
+                $("#img").attr("src",result[mbti]["img"]);
+                $("#animal").html(result[mbti]["animal"]);
+                $("#explain").html(result[mbti]["explain"]);
+            } else {
+                $(".progress-bar").attr('style','width: calc(100/12*'+num+'%)');
+                $("#title").html(q[num]["title"]);
+                $('#qimage').attr("src",(q[num]['qimage']));
+                $("#type").val(q[num]["type"]);
+                $("#A").html(q[num]["A"]);
+                $("#B").html(q[num]["B"]);
+            num++;
+            }
+        }
+    </script>
+    <!-- Go to www.addthis.com/dashboard to customize your tools -->
+    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-633bfc6e984944c1"></script>
+
+</body>
+</html>
